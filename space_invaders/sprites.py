@@ -40,15 +40,29 @@ OCTOPUS = [
     "01000010",
 ]
 
+# A round alien.  The silhouette is a circle so it reads as a spherical
+# scout ship rather than the angular invaders above.
+ORB = [
+    "00111100",
+    "01111110",
+    "11111111",
+    "11111111",
+    "11111111",
+    "11111111",
+    "01111110",
+    "00111100",
+]
+
 # (bitmap, points, colour-name) for each alien type, most valuable first.
 ALIEN_TYPES = [
     (SQUID, 30, "MAGENTA"),
     (CRAB, 20, "CYAN"),
     (OCTOPUS, 10, "YELLOW"),
+    (ORB, 5, "WHITE"),
 ]
 
 # Which alien type occupies each row of the fleet (top row first).
-ROW_TYPES = [0, 1, 1, 2]
+ROW_TYPES = [0, 1, 1, 2, 3]
 
 # --- Player ship (11x6) -------------------------------------------------
 
