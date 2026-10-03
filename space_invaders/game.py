@@ -4,6 +4,7 @@ import random
 
 import pygame
 
+from . import font
 from . import settings
 from . import sprites
 from .entities import Alien, Bullet, Player
@@ -19,8 +20,6 @@ class Game:
         )
         pygame.display.set_caption(settings.TITLE)
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 28)
-        self.big_font = pygame.font.Font(None, 64)
         self.reset()
 
     # ------------------------------------------------------------------
@@ -215,42 +214,50 @@ class Game:
             self.player.draw(self.screen)
 
         if self.state == "game_over":
-            self._draw_centered("GAME OVER", settings.RED, -40)
-            self._draw_centered("Press SPACE to play again", settings.WHITE, 30)
+            self._draw_centered("GAME OVER", settings.RED, -40, scale=4)
+            self._draw_centered(
+                "PRESS SPACE TO PLAY AGAIN", settings.WHITE, 30, scale=2
+            )
 
         pygame.display.flip()
 
     def _draw_hud(self):
-        score_surface = self.font.render(
-            f"SCORE  {self.score}", True, settings.WHITE
-        )
-        self.screen.blit(score_surface, (20, 15))
+        hud_scale = 2
+        hud_y = 15
 
-        wave_surface = self.font.render(
-            f"WAVE  {self.wave + 1}", True, settings.WHITE
-        )
-        self.screen.blit(
-            wave_surface,
-            (
-                int(settings.SCREEN_WIDTH / 2 - wave_surface.get_width() / 2),
-                15,
-            ),
+        font.draw_text(
+            self.screen,
+            f"SCORE {self.score}",
+            20,
+            hud_y,
+            hud_scale,
+            settings.WHITE,
         )
 
-        lives_surface = self.font.render(
-            f"LIVES  {max(self.lives, 0)}", True, settings.WHITE
-        )
-        self.screen.blit(
-            lives_surface,
-            (settings.SCREEN_WIDTH - lives_surface.get_width() - 20, 15),
+        wave_text = f"WAVE {self.wave + 1}"
+        wave_w, _ = font.text_size(wave_text, hud_scale)
+        font.draw_text(
+            self.screen,
+            wave_text,
+            (settings.SCREEN_WIDTH - wave_w) // 2,
+            hud_y,
+            hud_scale,
+            settings.WHITE,
         )
 
-    def _draw_centered(self, text, color, y_offset):
-        surface = self.big_font.render(text, True, color)
-        rect = surface.get_rect(
-            center=(
-                settings.SCREEN_WIDTH // 2,
-                settings.SCREEN_HEIGHT // 2 + y_offset,
-            )
+        lives_text = f"LIVES {max(self.lives, 0)}"
+        lives_w, _ = font.text_size(lives_text, hud_scale)
+        font.draw_text(
+            self.screen,
+            lives_text,
+            settings.SCREEN_WIDTH - lives_w - 20,
+            hud_y,
+            hud_scale,
+            settings.WHITE,
         )
-        self.screen.blit(surface, rect)
+
+    def _draw_centered(self, text, color, y_offset, scale=4):
+        width, height = font.text_size(text, scale)
+        x = (settings.SCREEN_WIDTH - width) // 2
+        y = settings.SCREEN_HEIGHT // 2 + y_offset - height // 2
+        font.draw_text(self.screen, text, x, y, scale, color)
