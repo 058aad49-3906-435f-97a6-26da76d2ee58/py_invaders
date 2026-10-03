@@ -54,8 +54,10 @@ class Game:
         # Each new wave starts a little lower, but never too low.
         y_offset = min(self.wave * 20, 200)
 
+        row_types = sprites.random_row_types(settings.ALIEN_ROWS)
+
         for row in range(settings.ALIEN_ROWS):
-            type_index = sprites.ROW_TYPES[row % len(sprites.ROW_TYPES)]
+            type_index = row_types[row]
             for col in range(settings.ALIEN_COLS):
                 x = start_x + col * (cell_w + settings.ALIEN_H_SPACING)
                 y = (

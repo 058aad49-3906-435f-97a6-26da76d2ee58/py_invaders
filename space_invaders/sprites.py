@@ -5,6 +5,8 @@ means transparent.  They are drawn at runtime, so no image files are
 needed and the game stays self-contained.
 """
 
+import random
+
 # --- Alien bitmaps (8x8) ------------------------------------------------
 
 SQUID = [
@@ -61,8 +63,20 @@ ALIEN_TYPES = [
     (ORB, 5, "WHITE"),
 ]
 
-# Which alien type occupies each row of the fleet (top row first).
-ROW_TYPES = [0, 1, 1, 2, 3]
+# Which alien type occupies each row is randomised every wave so the
+# different ship types show up in a fresh order as the levels progress.
+def random_row_types(rows):
+    """Return ``rows`` alien type indices in a random order.
+
+    The type indices are shuffled and then cycled, so every alien type
+    appears at least once whenever ``rows`` is at least the number of
+    types.  Each wave therefore shows all ship types, just arranged
+    differently.
+    """
+    types = list(range(len(ALIEN_TYPES)))
+    random.shuffle(types)
+    return [types[i % len(types)] for i in range(rows)]
+
 
 # --- Player ship (11x6) -------------------------------------------------
 
