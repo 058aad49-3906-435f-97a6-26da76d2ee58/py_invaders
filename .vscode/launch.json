@@ -8,6 +8,7 @@
             "module": "space_invaders.main",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
+            "python": "${workspaceFolder}/.venv/bin/python",
             "justMyCode": true
         }
     ]
